@@ -29,8 +29,6 @@ void applyBubbleSort(int arr[], int size) {
 
 // Returns true if the array is sorted, otherwise false.
 bool verifySort(int arr[], int size) {
-
-  bool flag = true;
   for (int i = 1; i < size; i++) {
     if (arr[i - 1] > arr[i]) {
       return false;
@@ -41,6 +39,9 @@ bool verifySort(int arr[], int size) {
 
 int main() {
   int size;
+
+  // Seed random number generator
+  srand(time(NULL));
 
   printf("Enter the size of the array: ");
   scanf("%d", &size);
