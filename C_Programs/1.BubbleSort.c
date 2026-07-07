@@ -4,8 +4,8 @@
 #include <time.h>
 
 // Generates an array of random integers of given size.
-int *generateArray(int size) {
-  int *arr = malloc(size * sizeof(int));
+int* generateArray(int size) {
+  int* arr = malloc(size * sizeof(int));
   for (int i = 0; i < size; i++) {
     arr[i] = rand() % 100;
   }
@@ -15,15 +15,17 @@ int *generateArray(int size) {
 // Sorts the given array using Bubble Sort.
 void applyBubbleSort(int arr[], int size) {
   for (int i = 0; i < size - 1; i++) {
-
+    bool swapped = false;
     for (int j = 0; j < size - i - 1; j++) {
-
       if (arr[j + 1] < arr[j]) {
         int temp = arr[j + 1];
         arr[j + 1] = arr[j];
         arr[j] = temp;
+        swapped = true;
       }
     }
+
+    if (!swapped) return;
   }
 };
 
@@ -47,7 +49,7 @@ int main() {
   scanf("%d", &size);
 
   // Generate random array
-  int *arr = generateArray(size);
+  int* arr = generateArray(size);
 
   // Start timer
   clock_t start = clock();
