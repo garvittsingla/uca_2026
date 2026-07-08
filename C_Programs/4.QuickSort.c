@@ -34,18 +34,38 @@ int *generateDecreasing(int size){
   return arr;
 }
 
-// Sorts the given array using Insertion Sort.
-void applyInsertionSort(int arr[], int size) {
-    for(int i = 1 ; i < size ; i++){
 
-        for(int j = i-1 ; j >= 0 ; j--){
-            if(arr[j] > arr[j+1]){
-                int temp = arr[j+1];
-                arr[j+1] = arr[j];
-                arr[j] = temp;
-            }
-        }
+int partition(int arr[], int low, int high) {
+    int pivot = arr[low + (high - low) / 2];
+    int i = low - 1;
+    int j = high + 1;
+    while (1) {
+        do {
+            i++;
+        } while (arr[i] < pivot);
+        do {
+            j--;
+        } while (arr[j] > pivot);
+        if (i >= j)
+            return j;
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
+}
+
+void Myquicksort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        Myquicksort(arr, low, pi);
+        Myquicksort(arr, pi + 1, high);
+    }
+}
+
+// Sorts the given array using Quick Sort.
+void applyQuickSort(int arr[], int size) {
+    if (size <= 0) return;
+    Myquicksort(arr, 0, size - 1);
 };
 
 // Returns true if the array is sorted, otherwise false.
@@ -63,7 +83,7 @@ void performSorting(int arr[], int size) {
   clock_t start = clock();
 
   // Apply sorting algorithm
-  applyInsertionSort(arr, size);
+  applyQuickSort(arr, size);
 
   // Stop timer
   clock_t end = clock();
@@ -83,27 +103,30 @@ void performSorting(int arr[], int size) {
 int main() {
 
   // Seed random number generator
-  int sizes[] = {4000, 8000, 12000, 16000, 20000, 24000, 28000,32000};
+  int sizes[] = {0, 8000, 12000, 16000, 20000, 24000, 28000,32000,36000};
 
   printf("Random numbers\n");
-  for(int i = 0 ; i < 7 ; i++){
+  for(int i = 0 ; i < sizeof(sizes)/sizeof(int) ; i++){
     int size = sizes[i];
     int* arr = generateArrayRandom(size);
     performSorting(arr, size);
+    free(arr);
   }
 
     printf("Descending numbers\n");
-   for(int i = 0 ; i < 7 ; i++){
+   for(int i = 0 ; i < sizeof(sizes)/sizeof(int) ; i++){
     int size = sizes[i];
     int* arr = generateDecreasing(size);
     performSorting(arr, size);
+    free(arr);
   }
 
   printf("Ascending numbers\n");
-  for(int i = 0 ; i < 7 ; i++){
+  for(int i = 0 ; i < sizeof(sizes)/sizeof(int); i++){
     int size = sizes[i];
     int* arr = generateIncreasing(size);
     performSorting(arr, size);
+    free(arr);
   }
 
   return 0;

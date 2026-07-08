@@ -4,13 +4,35 @@
 #include <time.h>
 
 // Generates an array of random integers of given size.
-int *generateArray(int size) {
+int *generateArrayRandom(int size) {
   int *arr = malloc(size * sizeof(int));
   for (int i = 0; i < size; i++) {
     arr[i] = rand() % 100;
   }
   return arr;
 };
+
+int *generateIncreasing(int size){
+  int number = 1;
+  int* arr = malloc(size*sizeof(int));
+  for(int i = 0 ; i < size ; i++){
+    arr[i] = number;
+    number++;
+  }
+
+  return arr;
+}
+
+int *generateDecreasing(int size){
+  int number = size-1;
+  int* arr = malloc(size*sizeof(int));
+  for(int i = 0 ; i < size ; i++){
+    arr[i] = number;
+    number--;
+  }
+
+  return arr;
+}
 
 // Sorts the given array using Selection Sort.
 void applySelectionSort(int arr[], int size) {
@@ -37,18 +59,7 @@ bool verifySort(int arr[], int size) {
   return true;
 };
 
-int main() {
-  int size;
-
-  // Seed random number generator
-  srand(time(NULL));
-
-  printf("Enter the size of the array: ");
-  scanf("%d", &size);
-
-  // Generate random array
-  int *arr = generateArray(size);
-
+void performSorting(int arr[], int size) {
   // Start timer
   clock_t start = clock();
 
@@ -61,18 +72,43 @@ int main() {
   // Calculate execution time
   double executionTime = (double)(end - start) / CLOCKS_PER_SEC;
 
-  // Verify correctness
-  if (verifySort(arr, size)) {
-    printf("Array is sorted successfully.\n");
-  } else {
+  //Verify correctness
+  if (!verifySort(arr, size)) {
     printf("Sorting failed!\n");
+    return;
   }
 
-  printf("Execution Time: %.6f seconds\n", executionTime);
-  printf("Execution Time: %.3f milliseconds\n", executionTime * 1000);
+  printf("%.3f ms\n",executionTime * 1000);
+  // printf("Execution Time: %.3f milliseconds\n", executionTime * 1000);
+}
+int main() {
 
-  // Free dynamically allocated memory
-  free(arr);
+  // Seed random number generator
+  int sizes[] = {0, 8000, 12000, 16000, 20000, 24000, 28000,32000,36000};
+
+  printf("Random numbers\n");
+  for(int i = 0 ; i < sizeof(sizes)/sizeof(int) ; i++){
+    int size = sizes[i];
+    int* arr = generateArrayRandom(size);
+    performSorting(arr, size);
+    free(arr);
+  }
+
+    printf("Descending numbers\n");
+   for(int i = 0 ; i < sizeof(sizes)/sizeof(int) ; i++){
+    int size = sizes[i];
+    int* arr = generateDecreasing(size);
+    performSorting(arr, size);
+    free(arr);
+  }
+
+  printf("Ascending numbers\n");
+  for(int i = 0 ; i < sizeof(sizes)/sizeof(int); i++){
+    int size = sizes[i];
+    int* arr = generateIncreasing(size);
+    performSorting(arr, size);
+    free(arr);
+  }
 
   return 0;
 }
