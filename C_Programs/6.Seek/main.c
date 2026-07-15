@@ -5,7 +5,9 @@
 #include <unistd.h>
 
 
+// File holes is a feature of sparse files which makes it veru useful
 
+// read about sparse files and also the seek
 int main(int argc,char* argv[]){
     size_t len;
     off_t offset;
@@ -52,9 +54,13 @@ int main(int argc,char* argv[]){
                 offset = atoi(&argv[i][1]);
                 if((lseek(fd,offset,SEEK_SET) == -1)){
                     printf("Seek failed\n");
-                };
-                printf("Seek successfull\n");
+                }
+                else printf("Seek successfull\n");
                 break;
+            // case 'l':
+            //     int pos = lseek(fd, 0, SEEK_CUR);
+            //     printf("Current position is %d\n",fd);
+            //     break;
             default:
                 printf("Arguments must be one of [wsr]\n");
                 exit(EXIT_FAILURE);

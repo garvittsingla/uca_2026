@@ -17,7 +17,6 @@ int main(int argc,char* argv[]){
     mode_t mode;
     char buffer[1024];
 
-
     if(argc < 2){
         printf("Usage : \n 1. --add 'log to add' \n 2. --view\n" );
         return 1;
