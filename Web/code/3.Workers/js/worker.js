@@ -1,15 +1,15 @@
-function heavyprocess(){
-   
-        for(let i = 0 ; i < 10000000000 ; i ++){
-
+function heavyprocess(number){
+        let sum = 0;
+        for(let i = 0 ; i < number ; i ++){
+                sum +=i;
         }
-        console.log("done");
+        console.log(sum);
         // ("done"); 
 }
 onmessage = (e) => {
-        if (e.data === "start") {
+        if (e.data) {
                 console.log("worker called")
-            heavyprocess();
+            heavyprocess(e.data);
             postMessage("done");
         }
     };

@@ -45,18 +45,18 @@
 
 // 3. using workers , UI not blocked 
 
-// const myworker = new Worker("./js/worker.js");
+const myworker = new Worker("./js/worker.js");
 
-// document.getElementById('btn').addEventListener('click',()=>{
-//             console.log("btn clicked"); 
-//             if (document.body.style.backgroundColor == "red") {
-//                 document.body.style.backgroundColor = "white";
-//             } else {
-//                 document.body.style.backgroundColor = "red";
-//             }
-//         })
-//         myworker.onmessage = (e) => {
-//             console.log(e.data); // "done"
-//         };
+document.getElementById('btn').addEventListener('click',()=>{
+            console.log("btn clicked"); 
+            if (document.body.style.backgroundColor == "red") {
+                document.body.style.backgroundColor = "white";
+            } else {
+                document.body.style.backgroundColor = "red";
+            }
+        })
+        myworker.onmessage = (e) => {
+            console.log(e.data); // "done"
+        };
         
-//         myworker.postMessage("start");
+        myworker.postMessage(20000000000);``

@@ -1,0 +1,18 @@
+{
+  "name": "timepass",
+  "version": "1.2.1",
+  "description": "Uca class nodejs brainrot",
+  "keywords": [
+    "brainrot",
+    "timepass"
+  ],
+  "license": "ISC",
+  "author": "Garvit Singla",
+  "type": "modeule",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "serve": "npx serve .",
+    "start": "node server.js"
+  }
+}
