@@ -24,7 +24,7 @@ int get_min(int a[]){
     return a[0];
 }
 void sink(int a[],int i){
-    if(i >= size) return;
+    if(i > size) return;
     int min = i;
     int L = i*2+1;
     int R = i*2 + 2;
