@@ -12,8 +12,7 @@
  */
  int sign(int x) {
     int leftmostbit = x >> 31;
-    int ans = 1&leftmostbit ? -1 : (x&1 ? 1 : 0);
-    return ans;
+    return leftmostbit | !!x;
      
 }
 
