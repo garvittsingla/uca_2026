@@ -11,7 +11,7 @@
 int getByte(int x, int n) {
     int shiftNumber = n << 3;
     int mask = 0xFF << shiftNumber;
-    return ((x & mask) >> shiftNumber) & 0xFF;
+    return (x & mask) >> shiftNumber
 }
 
 int main(){
