@@ -12,8 +12,12 @@
  */
 // we can also do one more thing, if we shift 1 left shift the x times other than the n like all bits be 1 rather than that n bits
 int fitsBits(int x, int n) {
-    int mask = (~0) << n;
-    return !(!(mask & x));
+    // int mask = (~0) << n;
+    // int somenum = mask & x;
+    // if(somenum !=0) return 0;
+    // return 1;
+
+    //could not do it, will ask in class
 }
 int main(){
 
