@@ -1,10 +1,11 @@
 #include <iostream>
+#include <iterator>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <cmath>
 
-class Encoder {
+class NaiveEncoder {
 private:
     const std::string MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -163,8 +164,52 @@ public:
   }
 };
 
+class BitwiseEncoder{
+  private:
+   const std::string MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+  public:
+    std::string encode(std::string input){
+      std::string encoded = "";
+      for(int i = 0 ; i < input.size() ; i+=3){
+        int remaining = input.size() - i;
+
+        int firstAscii = (int)input[i];
+        int secondAscii = i+1 < input.size() ? (int)input[i+1] : 0;
+        int thirdAscii = i+2 < input.size() ? (int)input[i+2] : 0;
+
+        int firstSixBytes = firstAscii >> 2;
+        int secondSixBytes = ((firstAscii & 0x03) << 4 ) | (secondAscii >> 4);
+        int thirdSixBytes = (((secondAscii & 0xf) << 2) | (thirdAscii >> 6));
+        int fourSixBytes = (thirdAscii & 0x3f);
+
+        encoded += MAP[firstSixBytes];
+            encoded += MAP[secondSixBytes];
+
+            if (remaining >= 2)
+                encoded += MAP[thirdSixBytes];
+            else
+                encoded += '=';
+
+            if (remaining == 3)
+                encoded += MAP[fourSixBytes];
+            else
+                encoded += '=';
+        }
+      
+      return encoded;
+     
+    }
+    //TODO:Complete this function
+    std::string decode(std::string encodedText){
+      return "";
+    }
+};
+
 int main(){
-  Encoder en;
+  // NaiveEncoder en;
+  BitwiseEncoder en;
+
   std::cout << "Enter the string you want to encode: ";
   std::string input;
   std::getline(std::cin, input); 
