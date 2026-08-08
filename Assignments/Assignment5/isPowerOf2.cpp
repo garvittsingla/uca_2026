@@ -18,4 +18,4 @@ int main(){
     std :: cout << isPower2(0) << std::endl; //0
     std :: cout << isPower2(-1) << std::endl; //0
 
-}
+}   

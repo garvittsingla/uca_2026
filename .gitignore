@@ -2,3 +2,4 @@
 a.out
 C_Programs/*.out
 */*.out
+.DS_Store

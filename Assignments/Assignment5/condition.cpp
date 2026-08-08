@@ -12,7 +12,7 @@ int conditional(int x, int y, int z) {
     int twocomplement = ~x + 1;
     int twocomplementsign = twocomplement >> 31;
     int signbit = x >> 31;
-    int mask = twocomplementsign | signbit;
+    int mask = twocomplementsign | signbit; // 0 -> 0 , any other value
 
     return (y & mask) | (z & ~mask);
 
