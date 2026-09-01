@@ -1,0 +1,98 @@
+-- Q1. List the name of every student along with their department name,
+-- the courses they are enrolled in, and the grade obtained - for Fall2023 only.
+-- Sort by department, then student name.
+SELECT
+    s.name ,
+    d.dept_name ,
+    c.course_name,
+    e.grade 
+FROM Student s 
+JOIN Department d ON s.dept_id = d.dept_id 
+JOIN Enrollment E on s.student_id = e.student_id 
+JOIN Course c on  e.course_id = c.course_id 
+WHERE e.semester = 'Fall2023' 
+ORDER BY d.dept_name,s.name;
+
+-- Q2. Find the names of all instructors, their department, and the total number of distinct 
+-- students who have ever taken any course they teach. Instructors with zero 
+-- students should still appear, with a count of 0
+
+SELECT 
+    i.name , 
+    d.dept_name, 
+    COUNT(e.student_id) AS count
+FROM Instructor i 
+JOIN Department d ON i.dept_id = d.dept_id 
+LEFT JOIN course c ON i.instructor_id = c.instructor_id
+LEFT JOIN Enrollment e ON c.course_id = e.course_id 
+GROUP BY i.instructor_id, i.name, d.dept_name ;
+
+-- Q3. List every course along with its instructor's name, the room and day 
+-- it is scheduled, and the total number of students enrolled in it (any semester).
+
+SELECT 
+    c.course_name , 
+    i.name , 
+    cs.room_no AS room , 
+    cs.day_of_week AS day , 
+    COUNT(e.student_id) AS Studentcount 
+FROM Course c 
+JOIN Instructor i ON c.instructor_id = i.instructor_id 
+JOIN Course_Schedule cs ON cs.course_id = c.course_id 
+JOIN Enrollment e ON e.course_id = c.course_id 
+GROUP BY c.course_id, c.course_name, i.name, cs.room_no, cs.day_of_week;
+
+-- Q4. List the names of students who are enrolled in at least one course offered by a 
+-- different department than their own home department.
+--  Show student name, home department, course name, and the course's department.
+
+SELECT 
+    s.name asname , 
+    d1.dept_name AS home , 
+    c.course_name,d2.dept_name AS course_department 
+FROM Student s 
+JOIN Department d1 ON s.dept_id = d1.dept_id 
+JOIN Enrollment e ON s.student_id = e.student_id 
+JOIN Course c ON e.course_id = c.course_id 
+JOIN Department d2 ON c.dept_id = d2.dept_id 
+WHERE s.dept_id <> c.dept_id;
+
+-- Q5. Find pairs of students who are enrolled in the same course in the same semester but received different grades. 
+-- Show both student names, the course name, the semester, and both grades. 
+-- Avoid showing the same pair twice (e.g., don't show both "A-B" and "B-A").
+
+SELECT
+    s1.name AS student1 ,
+    s2.name AS student2, 
+    c.course_name, 
+    e1.semester , 
+    e1.grade AS grade1, 
+    e2.grade AS grade2 
+FROM Enrollment e1 
+JOIN Enrollment e2 ON e1.course_id = e2.course_id 
+AND e1.semester = e2.semester 
+AND e1.grade <> e2.grade 
+AND e1.student_id < e2.student_id  
+JOIN Student s1 ON e1.student_id = s1.student_id 
+JOIN Student s2 ON e2.student_id = s2.student_id 
+JOIN Course c ON e1.course_id = c.course_id;
+
+
+-- Q6. List the titles of books whose author has written books catalogued under more than one department.
+-- (Hint: this needs Book joined to itself, or a 
+-- GROUP BY author HAVING COUNT(DISTINCT dept_id) > 1, then joined back to fetch qualifying titles.)
+
+SELECT 
+    title
+FROM 
+    Book
+WHERE 
+    author IN (
+        SELECT author
+        FROM Book
+        GROUP BY author
+        HAVING COUNT(DISTINCT dept_id) > 1
+    ); 
+
+
+

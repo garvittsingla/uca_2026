@@ -127,7 +127,7 @@ int main()
                floatCmparator,
                sizeof(float));
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++) 
     {
         printf("%f ", f[i]);
     }
