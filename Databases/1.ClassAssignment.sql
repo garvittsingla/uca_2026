@@ -42,12 +42,33 @@ JOIN Course_Schedule cs ON cs.course_id = c.course_id
 JOIN Enrollment e ON e.course_id = c.course_id 
 GROUP BY c.course_id, c.course_name, i.name, cs.room_no, cs.day_of_week;
 
+-- Or by subqueries
+
+SELECT
+    c.course_name, i.name,
+    s.room_no,s.day_of_week,
+    e.enrollment_count
+FROM
+    Course c, Instructor i,Course_Schedule s,
+    (
+        SELECT
+            ee.course_id,COUNT(ss.student_id) as enrollment_count
+        FROM
+            Enrollment ee, Student ss
+        WHERE
+            ss.student_id=ee.student_id
+        GROUP BY ee.course_id
+    ) e
+WHERE
+    c.instructor_id=i.instructor_id AND s.course_id = c.course_id;
+
+
 -- Q4. List the names of students who are enrolled in at least one course offered by a 
 -- different department than their own home department.
 --  Show student name, home department, course name, and the course's department.
 
 SELECT 
-    s.name asname , 
+    s.name AS name , 
     d1.dept_name AS home , 
     c.course_name,d2.dept_name AS course_department 
 FROM Student s 
@@ -94,5 +115,11 @@ WHERE
         HAVING COUNT(DISTINCT dept_id) > 1
     ); 
 
+-- Q7. Find the names of instructors who teach more courses than the average number of courses taught per instructor 
+-- (computed across all instructors who teach at least one course).
+// avg from course instructor_id
+ SELECT instructor_id,COUNT(*) FROM Course group  by instructor_id; -- avg bhi chahiye and voh instructor id bhi chahiye
 
-
+-- Q8. For each course, compute the "average grade point" of students enrolled in it, using this mapping: A = 4, B = 3, C = 2. 
+-- Then list only the courses whose average grade point is higher than the overall average grade point across all enrollments in the university.
+-- todo: will do it later
