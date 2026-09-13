@@ -1,4 +1,4 @@
-const worker = new Worker('worker.js');
+const worker = new worker('worker.js');
 
 worker.postMessage("start");
 

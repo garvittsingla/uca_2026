@@ -39,7 +39,7 @@ class RobotMessageTracker {
         
         while (!queue.isEmpty() && (timeStamp - queue.peek().timeStamp) >= 10) {
             MessageNode node = queue.poll();
-            if(node.status.equals("ON_HOLD"){
+            if(node.status.equals("ON_HOLD")){
                 System.out.println(node.message + " " + node.timeStamp);
             }    
         } 

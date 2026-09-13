@@ -7,7 +7,7 @@ public class TowerOfHanoi{
         return a+b+1;
     }
     public static void main(String args[]){
-        int n = ; 
+        int n = 2 ; 
         // A, B and C are names of rods
         int steps = towerOfHanoi(n, 'A', 'C', 'B');
         System.out.println(steps);

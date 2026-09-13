@@ -123,3 +123,39 @@ WHERE
 -- Q8. For each course, compute the "average grade point" of students enrolled in it, using this mapping: A = 4, B = 3, C = 2. 
 -- Then list only the courses whose average grade point is higher than the overall average grade point across all enrollments in the university.
 -- todo: will do it later
+
+
+-- Q10. Find students who have issued a book but never made a Spring2024 fee payment.
+--  Show student name, department, and how many books they've issued.
+-- Not exists used because it is asked not even any user should have a payment in spring 2024
+-- but when we use join , if same student will have payment in some other semester as well then it will take the name of that student 
+SELECT s.name,d.dept_name,COUNT(bi.student_id) AS COUNT FROM Student s 
+    JOIN Book_Issue bi ON bi.student_id = s.student_id 
+    JOIN Department d ON d.dept_id = s.dept_id  
+    WHERE NOT EXISTS(
+        SELECT 1 FROM 
+        Fee_Payment fp WHERE
+        fp.student_id = s.student_id AND fp.semester = 'Spring2024';
+    ) 
+    GROUP BY bi.student_id;
+
+
+-- Q11. (Relational division) Find the student(s) who have enrolled in every single 
+-- course offered by their own home department.
+-- (Hint: for each student, there should be no course in 
+-- their department that they have not taken – this is a classic double-NOT EXISTS pattern.)
+
+ SELECT * FROM Student s WHERE
+    NOT EXISTS 
+        (SELECT 1 FROM Course c 
+        WHERE c.dept_id = s.dept_id 
+        AND NOT EXISTS 
+            (SELECT 1 FROM Enrollment e 
+            WHERE e.student_id = s.student_id 
+            AND e.course_id = c.course_id
+            )
+        );
+
+-- Q12. Find instructor(s) for whom every student who has ever taken one of their 
+-- courses received a grade of A or B only – i.e., no student of theirs has ever gotten a C or lower.
+-- Show instructor name and department.

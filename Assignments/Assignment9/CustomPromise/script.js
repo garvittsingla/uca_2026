@@ -58,7 +58,7 @@ function MyPromise(executorFunction) {
 }
 
 new MyPromise((resolve,reject) => {
-    resolve(5);
+    reject(5);
 }).then(value => {
     return value * 2;
 }).then(value => {
