@@ -13,6 +13,15 @@ JOIN Course c on  e.course_id = c.course_id
 WHERE e.semester = 'Fall2023' 
 ORDER BY d.dept_name,s.name;
 
+-- OR
+
+SELECT s.name,d.dept_name,c.course_name,e.grade 
+    FROM STUDENT s,Department d,Course c,Enrollment e 
+    WHERE s.dept_id = d.dept_id 
+    AND s.student_id = e.student_id 
+    AND e.course_id = c.course_id 
+    AND e.semester = 'Fall2023';
+
 -- Q2. Find the names of all instructors, their department, and the total number of distinct 
 -- students who have ever taken any course they teach. Instructors with zero 
 -- students should still appear, with a count of 0
@@ -117,7 +126,7 @@ WHERE
 
 -- Q7. Find the names of instructors who teach more courses than the average number of courses taught per instructor 
 -- (computed across all instructors who teach at least one course).
-// avg from course instructor_id
+-- avg from course instructor_id
  SELECT instructor_id,COUNT(*) FROM Course group  by instructor_id; -- avg bhi chahiye and voh instructor id bhi chahiye
 
 -- Q8. For each course, compute the "average grade point" of students enrolled in it, using this mapping: A = 4, B = 3, C = 2. 
