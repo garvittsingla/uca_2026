@@ -127,11 +127,27 @@ WHERE
 -- Q7. Find the names of instructors who teach more courses than the average number of courses taught per instructor 
 -- (computed across all instructors who teach at least one course).
 -- avg from course instructor_id
- SELECT instructor_id,COUNT(*) FROM Course group  by instructor_id; -- avg bhi chahiye and voh instructor id bhi chahiye
+ SELECT i.name,count(*) FROM Course c 
+    JOIN Instructor i ON i.instructor_id = c.instructor_id
+    GROUP BY c.instructor_id 
+    HAVING COUNT(*) >
+        (SELECT AVG(s) FROM (SELECT COUNT(*) as s FROM Course GROUP BY instructor_id) as Si );
 
 -- Q8. For each course, compute the "average grade point" of students enrolled in it, using this mapping: A = 4, B = 3, C = 2. 
 -- Then list only the courses whose average grade point is higher than the overall average grade point across all enrollments in the university.
--- todo: will do it later
+
+SELECT
+    c.course_id,
+    AVG(
+        CASE
+            WHEN e.grade = 'A' THEN 4
+            WHEN e.grade = 'B' THEN 3
+            WHEN e.grade = 'C' THEN 2
+        END
+    )
+    FROM Course c
+    JOIN Enrollment e ON e.course_id = c.course_id
+    GROUP BY c.course_id;
 
 
 -- Q10. Find students who have issued a book but never made a Spring2024 fee payment.
@@ -168,3 +184,48 @@ SELECT s.name,d.dept_name,COUNT(bi.student_id) AS COUNT FROM Student s
 -- Q12. Find instructor(s) for whom every student who has ever taken one of their 
 -- courses received a grade of A or B only – i.e., no student of theirs has ever gotten a C or lower.
 -- Show instructor name and department.
+
+ SELECT instructor_id FROM Course c 
+    WHERE NOT EXISTS
+        (SELECT 1 FROM Course c2 JOIN Enrollment e 
+            ON e.course_id = c2.course_id 
+            WHERE c2.instructor_id = c.instructor_id 
+            AND grade = 'C');
+
+-- Q13. Find students who currently have 
+-- an outstanding (unreturned) book – return_date IS NULL – and are 
+-- also enrolled in a course scheduled in a room that some other 
+-- course also uses (a room shared by 2+ courses).
+-- Show student name, book title, and the shared room number.
+
+SELECT s.name,b.title,cs.room_no 
+    FROM Student s 
+    JOIN Enrollment e ON e.student_id = s.student_id 
+    JOIN Course c ON c.course_id = e.course_id 
+    JOIN Book_issue bi ON s.student_id = bi.student_id 
+    JOIN Book b ON b.book_id = bi.book_id 
+    JOIN Course_Schedule cs ON cs.course_id = c.course_id 
+    WHERE EXISTS (SELECT 1 FROM Course_Schedule cs1 WHERE cs1.room_no = cs.room_no AND cs1.schedule_id != cs.schedule_id) 
+    AND bi.return_date IS NULL;
+
+-- Q14. Using ALL, find the instructor(s) whose
+-- salary is greater than the salary of 
+-- every instructor in the 
+-- CS department (dept_id = 1), 
+-- excluding CS instructors themselves from the result.
+
+SELECT i.name FROM Instructor i 
+    WHERE i.dept_id <> 1 
+    AND i.salary > ALL 
+        (SELECT i2.salary FROM Instructor i2 WHERE i2.dept_id = 1);
+
+-- Q15. Using a window function (RANK() or DENSE_RANK()),
+-- find the top 2 students per department ranked by 
+-- the number of distinct courses they've enrolled in. 
+-- Show department name, student name, distinct course 
+-- count, and rank. Handle ties sensibly.
+
+-- Q16. Find the second-highest paid instructor in
+--  each department (not the overall second-highest —
+--  per department), without using LIMIT. 
+-- Show department name, instructor name, and salary.
