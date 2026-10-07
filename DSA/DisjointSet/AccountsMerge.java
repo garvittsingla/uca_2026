@@ -9,7 +9,7 @@ public class AccountsMerge {
             int n = accounts.size();
             DSU ds = new DSU(n);
             Map<String, Integer> map = new HashMap<>();
-
+            
             for(int i = 0 ; i < n ; i++){
                 for(int j = 1 ; j < accounts.get(i).size() ; j++){
                     String mail  = accounts.get(i).get(j);
@@ -20,8 +20,6 @@ public class AccountsMerge {
                     }
                 }
             }
-
-            
 
             HashMap<Integer, List<String>> mpp = new HashMap<>();
             for(Map.Entry<String, Integer> entry : map.entrySet()){
