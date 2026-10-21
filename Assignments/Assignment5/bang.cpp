@@ -10,8 +10,8 @@
 int bang(int x) {
    int twocomplement = ~x+1;
    int complementSignedBit = twocomplement >> 31;
-   int  signedBit = x >> 31;
-   return ((signedBit | complementSignedBit)) + 1;
+   int  sls
+   complementSignedBit)) + 1;
 }
 
 
